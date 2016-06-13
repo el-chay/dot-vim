@@ -1,7 +1,5 @@
 "tab stop = 4; shift width = 4; expand tab on; visual bell (instead of beep)
-set ts=4 sw=4 et vb
-set laststatus=2
-set showtabline=2
+set ts=4 sw=4 et vb laststatus=2 showtabline=2 incsearch hlsearch
 setlocal spell spelllang=en_us
 colorscheme zenburn
 syntax on
