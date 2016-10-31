@@ -1,5 +1,5 @@
 "tab stop = 4; shift width = 4; expand tab on; visual bell (instead of beep)
-set ts=4 sw=4 et vb laststatus=2 showtabline=2 incsearch hlsearch
+set ts=4 sw=4 et vb laststatus=2 showtabline=2 incsearch hlsearch nocp wildmenu
 setlocal spell spelllang=en_us
 colorscheme zenburn
 syntax on
@@ -30,3 +30,6 @@ let g:airline#extensions#tabline#left_alt_sep = '║'
 let g:airline#extensions#tabline#left_sep = '║'
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#fnamemod = ':t'
+
+" netrw stuff
+let g:netrw_banner = 0
