@@ -1,5 +1,8 @@
-"tab stop = 4; shift width = 4; expand tab on; visual bell (instead of beep)
-set ts=4 sw=4 et vb laststatus=2 showtabline=2 incsearch hlsearch nocp wildmenu
+" tab stop = 4; shift width = 4; expand tab on; visual bell (instead of beep)
+" laststatus and showtabline are for "airline"
+" incsearch and hlsearch self explanatory
+" nocp no compatible with vi ;-)
+set ts=4 sw=4 et vb laststatus=2 showtabline=2 incsearch hlsearch nocp
 setlocal spell spelllang=en_us
 colorscheme zenburn
 syntax on
@@ -33,3 +36,14 @@ let g:airline#extensions#tabline#fnamemod = ':t'
 
 " netrw stuff
 let g:netrw_banner = 0
+
+" Syntastic stuff
+" set statusline+=%#warningmsg#
+" set statusline+=%{SyntasticStatuslineFlag()}
+" set statusline+=%*
+" 
+" let g:syntastic_always_populate_loc_list = 1
+" let g:syntastic_auto_loc_list = 1
+" let g:syntastic_check_on_open = 1
+" let g:syntastic_check_on_wq = 0
+
