@@ -33,6 +33,7 @@ let g:airline#extensions#tabline#left_alt_sep = '║'
 let g:airline#extensions#tabline#left_sep = '║'
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#fnamemod = ':t'
+map <F12> :0r!wget -q http://whatthecommit.com/index.txt -O -<CR>
 
 " netrw stuff
 let g:netrw_banner = 0
