@@ -37,6 +37,5 @@ map <F12> :0r!wget -q http://whatthecommit.com/index.txt -O -<CR>
 
 " netrw stuff
 let g:netrw_banner = 0
-
 " Slimv
 let g:lisp_rainbow=1
