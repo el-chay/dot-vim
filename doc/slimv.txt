@@ -1,4 +1,4 @@
-*slimv.txt*                    Slimv                 Last Change: 19 Mar 2014
+*slimv.txt*                    Slimv                 Last Change: 19 Mar 2017
 
 Slimv                                                                  *slimv*
                                Version 0.9.13
@@ -188,6 +188,10 @@ For the Swank options plese visit |swank-configuration|.
 
 |g:slimv_preferred|          Name of the preferred lisp implementation.
 
+|g:slimv_python_version|     If defined, determines Python version to use,
+                             when 3 use :python3 and friends, otherwise
+                             :python or :python3 is used as available.
+
 |g:slimv_repl_max_len|       Maximum number of lines in the REPL buffer.
 
 |g:slimv_repl_name|          Name of the REPL buffer.
@@ -213,10 +217,18 @@ For the Swank options plese visit |swank-configuration|.
 
 |g:slimv_swank_scheme|       Command used to start the Scheme SWANK server.
 
+|g:slimv_tags_file|          Name of tags file used by Slimv. 
+
 |g:slimv_threads_name|       Name of the Threads buffer.
 
 |g:slimv_timeout|            Timeout defined for starting up or connecting
                              to the SWANK server.
+
+|g:slimv_unmap_cr|           Do not add special insert mode mapping for <CR>.
+
+|g:slimv_unmap_tab|          Do not add special insert mode mapping for <Tab>.
+
+|g:slimv_unmap_space|        Do not add special insert mode mapping for <Space>.
 
 |g:slimv_updatetime|         Alternative value for 'updatetime' during REPL
                              refresh.
@@ -388,6 +400,13 @@ unsatisfactory, then override this option with the desired command.
 The default ctags command is:
   "ctags.exe -a --language-force=lisp *.lisp *.clj"
 
+                                                            *g:slimv_tags_file*
+The Find-Definition function gets location information from the SWANK server.
+Slimv uses a dedicated tags file for Find-Definitions. By default this is a
+temporary file but the filename can be overridden via this option. If this
+variable is set to the empty string ('') then the whole Find-Definitions
+function is disabled.
+
                                                           *g:slimv_keybindings*
 Defines the keybinding set used by Slimv.
 Value 0 means no keybinding at all.
@@ -397,6 +416,18 @@ Value 2 defines the easy keybinding with two-key bindings (after <Leader>).
         Example: Eval-Defun is mapped to ,ed
 Other values mean no predefined keybinding is wanted.
 <Leader> is set to "," by default in Slimv.
+
+                                                            *g:slimv_unmap_cr*
+                                                           *g:slimv_unmap_tab*
+                                                         *g:slimv_unmap_space*
+If nonzero then Slimv does not add special insert mode mapping for the
+<CR>/<Tab>/<Space> keys in the editor buffer. This might come in handy when
+additional scripts are installed for Vim together with Slimv and there is a
+collision in the mappings for these keys. Of course in this case the related
+Slimv functions will not work when pressing those keys.
+
+Note: in case Paredit is used then the |g:paredit_electric_return| option shall
+also be set to 0 in order to completely disable mappings for <CR>.
 
                                                                *g:slimv_leader*
 This option allows a custom <Leader> setting for the Slimv keybindings.
@@ -612,6 +643,12 @@ Lisp form built when issuing the 'apropos' command.
 Example:
     let g:slimv_template_apropos = '(apropos "%1")'
 
+                                                       *g:slimv_python_version*
+Selects the python version to use. 
+When exists and set to 3, the :python3 and :py3file commands are used, when
+exists and not set to 3, the :python and :pyfile commands are used, and when
+it is not defined, has('python') has('python3') determine which are used.
+
 -------------------------------------------------------------------------------
                                                                *slimv-keyboard*
 
@@ -635,10 +672,12 @@ sequence, then you may want to fine tune these Vim options:
     <C-X>0           Close Form
     <Tab>            Complete Symbol
     <Space>          Function Arglist
+    <C-]>            Find Definitions (Tag Lookup)
 
     Edit commands (Normal mode):
     ,)      ,tc      Close Form
     ,(      ,(t      Paredit Toggle
+    ,j      ,fd      Find Definitions
 
     Evaluation commands:
 ["x],d  ["x],ed      Eval Defun (current top level form) [put in register x]
@@ -696,6 +735,8 @@ sequence, then you may want to fine tune these Vim options:
     Repl commands:
     ,c      ,rc      Connect to Server
     ,y      ,ri      Interrupt Lisp Process
+    ,-      ,-       Clear REPL
+    ,Q      ,rq      Quit REPL
 
 
     Set#1   Set#2    Command
@@ -1065,6 +1106,7 @@ currently implemented in the Slimv SWANK client.
   swank:profile-reset
   swank:profiled-functions
   swank:quit-inspector
+  swank:quit-lisp
   swank:set-package
   swank:simple-completions
   swank:sldb-abort
@@ -1141,6 +1183,9 @@ Insert Mode:
 
 Please note that the behaviour of <CR>, <Up>, <Down> is affected by the value
 of option |g:slimv_repl_simple_eval|.
+
+The Lisp REPL can be closed by the 'Quit REPL' command (mapped to <Leader>Q
+by default). This also closes the lisp process running the SWANK server. 
 
 
 ===============================================================================
@@ -1467,6 +1512,74 @@ CHANGE LOG                                                    *slimv-changelog*
 0.9.13 - Update REPL buffer in the background, no need to bring it into focus.
        - The evaluation result is also displayed in the status line.
        - REPL buffer number is remembered upon creation, no need to find it by name.
+       - In Vim 7.4 normal mode cursor movements and winrestview() cannot be
+         used in an 'indentexpr'.
+       - Concealing should not hide whitespaces in the Inspector buffer.
+       - Do not load contribs by default when starting the swank server.
+       - Place cursor at prompt position in the REPL buffer upon tab switch.
+       - Bugfix: Scheme builtin swank not launching.
+       - Fix for pressing Enter on a filename in SLDB when the filename is
+         not enclosed in double quotes.
+       - Save and restore marks ` and ' in the source buffer while updating REPL.
+       - Removed "b:" prefix from function names because latest vim version does not.
+       - Raising s-expressions now support [] and {}.
+       - Reindent current form after ,< and ,>.
+       - Paredit: always leave cursor to opening char's pos after wrapping selection.
+       - Paredit: fix possible cursor move problem caused by &indentexpr
+         when using the c operator.
+       - Added Clozure CL specific code to read environment variable SWANK_PORT.
+       - Changed nnoremap to noremap in normal mode movement mappings (, ), [[, ]].
+       - R language related fixes.
+       - Bugfix: 2 keymaps assumed g:paredit_leader is identical to ','.
+       - Fix for paredit 'x' and 'X' when clipboard=unnamed.
+       - Paredit: added support for hy.
+       - Paredit: use <Leader> instead of mapleader.
+       - Paredit: enhanced detection of forms balanced state.
+       - Paredit: unescaped square brackets in balance detection.
+       - Add support for alternate backspace keybinding.
+       - Bugfix: Null character should not be inserted from Python side.
+       - Delete contents into the black hole register when exiting the
+         Inspect/Threads/Sldb buffer.
+       - Added options g:slimv_unmap_cr, g:slimv_unmap_tab, g:slimv_unmap_space.
+       - Paredit bugfix: pressing <Tab> (for completion) followed by ')'.
+       - Fixed selection handling in EvalRegion and CompileRegion when
+         "set clipboard=unnamedplus".
+       - Paredit: Remove invalid uses of `call`.
+       - Do not destroy clipboard contents in EvalDefun when set clipboard=unnamed.
+       - Added missing quotes in the existence check for g:slimv_hs_root.
+       - Paredit: fixed problem with 'x' and 'X' commands when erasing
+         multi-byte unicode character.
+       - Insert mode Ctrl-W does not delete the prompt in the REPL buffer.
+       - Replace '\' characters with '/' in the compiled file name returned
+         by the swank server.
+       - Fix Paredit burfing (by moving parens left or right) when there are
+         stings as elements.
+       - Bugfix: arglist printing sometimes permanently disabled 'showmode'.
+       - Added command 'Quit REPL' mapped to <Leader>Q.
+       - Bugfix: wrong number of arguments when calling swank:eval-string-in-frame.
+       - Print REPL result string in a new line.
+       - Bugfix: MenuMap now correctly sets no keybindings when
+         g:slimv_keybindings is other than '1' or '2'.
+       - Bugfix: call winrestview() after SlimvCompileDefun.
+       - Indentation routine keeps original cursor position.
+       - Removed "com" extension from the scheme swank server when loading
+         compiled file.
+       - Store package in register when SlimvEvalTestDefun() is called
+         with an output register.
+       - Disable swank completion and arglist display while in :read_string mode.
+       - Added Find-Definitions function.
+       - Compatibility modifications for Python3.
+       - Updated logic for python version selection.
+       - Added paredit support for shen language.
+       - Use current package in Find-Definition.
+       - Fix unicode string length calculation for Python 3.x.
+       - Ignore Vim generated tags file.
+       - Paredit: Do not skip parens after \\ when searching for pairs.
+       - Use :tjump instead of :tag to jump to a definiton upon pressing Ctrl+].
+       - Modify Applescript for modern version iTerm.
+       - Fixed indentation of 'if' when the swank server does not provide it.
+       - Support both old and new style SWANK version strings (YYYY-MM-DD vs X.XX).
+       - Updated bundled swank server to slime version 2.19.
 
 0.9.12 - Added support for the R language via swank-R (by Philipp Marek).
        - Test form for SlimvEvalTestExp() may wrap the selected s-expression.
@@ -2113,7 +2226,9 @@ Jon Thacker, Andrew Hills, Jerome Baum, John Obbele, Andreas Fredriksson,
 Andrew Lyon, Andrew Smirnoff, Brett Kosinski, David Greenberg, Sung Pae,
 Conrad Schuler, Tim Pope, David Soria Parra, Colin Jones, Logan Campbell,
 John Szakmeister, Glen Gibb, Federico Churca-Torrusio, Robert Kerr, Jimmy Lu,
-Seth Price for additional notes and contributions.
+Seth Price, Philip Xu, Junegunn Choi, and github users elmart, chiku-samugari,
+dusenberrymw, bclube, vi1, FreeBlues, bnoordhuis, bvnierop, mattn, D4ryus,
+jakykong, Prajjwal, Neetless, jurov for additional notes and contributions.
 
 I would also like to say a big thank you to everyone donating to support
 development. This is a one-element list at the moment: :)

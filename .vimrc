@@ -38,13 +38,5 @@ map <F12> :0r!wget -q http://whatthecommit.com/index.txt -O -<CR>
 " netrw stuff
 let g:netrw_banner = 0
 
-" Syntastic stuff
-" set statusline+=%#warningmsg#
-" set statusline+=%{SyntasticStatuslineFlag()}
-" set statusline+=%*
-" 
-" let g:syntastic_always_populate_loc_list = 1
-" let g:syntastic_auto_loc_list = 1
-" let g:syntastic_check_on_open = 1
-" let g:syntastic_check_on_wq = 0
-
+" Slimv
+let g:lisp_rainbow=1
