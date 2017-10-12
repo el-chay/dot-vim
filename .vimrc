@@ -7,6 +7,8 @@ setlocal spell spelllang=en_us
 colorscheme zenburn
 syntax on
 
+set fillchars+=vert:║
+set statusline+=%%%p║                         " file %
 set statusline=   " Reload!
 set statusline+=%n\                           " buffer number
 set statusline+=«%f»\                         " file name
@@ -39,3 +41,7 @@ map <F12> :0r!wget -q http://whatthecommit.com/index.txt -O -<CR>
 let g:netrw_banner = 0
 " Slimv
 let g:lisp_rainbow=1
+let g:slimv_repl_split=4
+" Don't use the default pager, load the Man plugin
+let $PAGER=''
+runtime ftplugin/man.vim
