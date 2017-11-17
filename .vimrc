@@ -45,3 +45,4 @@ let g:slimv_repl_split=4
 " Don't use the default pager, load the Man plugin
 let $PAGER=''
 runtime ftplugin/man.vim
+set guifont=Inconsolata\ Medium\ 14
