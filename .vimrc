@@ -1,18 +1,19 @@
-set ts=4 sw=4 et vb laststatus=2 incsearch hlsearch nocp
+set ts=4 sw=4 laststatus=2
+set is hls nocp et vb
 setlocal spell spelllang=en_us
 colorscheme zenburn
 syntax on
 
 set statusline=   " Reload!
 set statusline+=\ %{mode()}\ \|               " Mode
-set statusline+=\ %f\ \|                        " file name
+set statusline+=\ %t\ \|                      " file name
 set statusline+=\ %{!empty(&ft)?&ft:'none'},  " filetype
 set statusline+=%{!empty(&fenc)?&fenc:&enc},  " encoding
 set statusline+=%{&fileformat}\               " file format
 set statusline+=%m%w%h%r                      " flags
 set statusline+=%=                            " right align
-set statusline+=%(%b,0x%B%)\ \|\              " current char
-set statusline+=%(%l,%c%)\ \|\                " offset
+set statusline+=%b,0x%B\ \|\                  " current char
+set statusline+=%l,%c\ \|\                    " position
 set statusline+=%%%p                          " file %
 
 " netrw stuff
