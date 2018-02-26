@@ -4,7 +4,8 @@ colorscheme zenburn
 syntax on
 
 set statusline=   " Reload!
-set statusline+=\ %f\ \|                      " file name
+set statusline+=\ %{mode()}\ \|               " Mode
+set statusline+=\ %f\ \|                        " file name
 set statusline+=\ %{!empty(&ft)?&ft:'none'},  " filetype
 set statusline+=%{!empty(&fenc)?&fenc:&enc},  " encoding
 set statusline+=%{&fileformat}\               " file format
