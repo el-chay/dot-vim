@@ -21,20 +21,6 @@ set statusline+=%(%b,0x%B%)\║\                " current char
 set statusline+=%(%l,%c%V%)\║\                " offset
 set statusline+=%%%p║                         " file %
 
-let g:airline_powerline_fonts = 0
-if !exists('g:airline_symbols')
-  let g:airline_symbols = {}
-endif
-let g:airline_left_sep = '║'
-let g:airline_right_sep = '║'
-let g:airline_symbols.branch = '⎇'
-let g:airline_symbols.readonly = '®'
-let g:airline_symbols.whitespace = 'Ξ'
-let g:airline_theme = 'zenburn'
-let g:airline#extensions#tabline#left_alt_sep = '║'
-let g:airline#extensions#tabline#left_sep = '║'
-let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#tabline#fnamemod = ':t'
 map <F12> :0r!wget -q http://whatthecommit.com/index.txt -O -<CR>
 
 " netrw stuff
@@ -45,4 +31,5 @@ let g:slimv_repl_split=4
 " Don't use the default pager, load the Man plugin
 let $PAGER=''
 runtime ftplugin/man.vim
+set keywordprg=:Man
 set guifont=Inconsolata\ Medium\ 14
