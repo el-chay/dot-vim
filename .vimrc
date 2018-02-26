@@ -1,27 +1,18 @@
-" tab stop = 4; shift width = 4; expand tab on; visual bell (instead of beep)
-" laststatus and showtabline are for "airline"
-" incsearch and hlsearch self explanatory
-" nocp no compatible with vi ;-)
-set ts=4 sw=4 et vb laststatus=2 showtabline=2 incsearch hlsearch nocp
+set ts=4 sw=4 et vb laststatus=2 incsearch hlsearch nocp
 setlocal spell spelllang=en_us
 colorscheme zenburn
 syntax on
 
-set fillchars+=vert:║
-set statusline+=%%%p║                         " file %
 set statusline=   " Reload!
-set statusline+=%n\                           " buffer number
-set statusline+=«%f»\                         " file name
-set statusline+=%{!empty(&ft)?&ft:'none'},    " filetype
+set statusline+=\ %f\ \|                      " file name
+set statusline+=\ %{!empty(&ft)?&ft:'none'},  " filetype
 set statusline+=%{!empty(&fenc)?&fenc:&enc},  " encoding
 set statusline+=%{&fileformat}\               " file format
 set statusline+=%m%w%h%r                      " flags
 set statusline+=%=                            " right align
-set statusline+=%(%b,0x%B%)\║\                " current char
-set statusline+=%(%l,%c%V%)\║\                " offset
-set statusline+=%%%p║                         " file %
-
-map <F12> :0r!wget -q http://whatthecommit.com/index.txt -O -<CR>
+set statusline+=%(%b,0x%B%)\ \|\              " current char
+set statusline+=%(%l,%c%)\ \|\                " offset
+set statusline+=%%%p                          " file %
 
 " netrw stuff
 let g:netrw_banner = 0
@@ -33,3 +24,4 @@ let $PAGER=''
 runtime ftplugin/man.vim
 set keywordprg=:Man
 set guifont=Inconsolata\ Medium\ 14
+map <F12> :0r!wget -q http://whatthecommit.com/index.txt -O -<CR>
