@@ -5,15 +5,16 @@ colorscheme zenburn
 syntax on
 
 set statusline=   " Reload!
-set statusline+=\ %{mode()}\ \|               " Mode
-set statusline+=\ %t\ \|                      " file name
-set statusline+=\ %{!empty(&ft)?&ft:'none'},  " filetype
+set statusline+=%{mode()}\┊                   " Mode
+set statusline+=\ %t\                         " file name
+set statusline+=%{!empty(fugitive#head())?'('.fugitive#head().')\ ':''} " Branch
+set statusline+=\┊\ %{!empty(&ft)?&ft:'none'},  " filetype
 set statusline+=%{!empty(&fenc)?&fenc:&enc},  " encoding
 set statusline+=%{&fileformat}\               " file format
 set statusline+=%m%w%h%r                      " flags
 set statusline+=%=                            " right align
-set statusline+=%b,0x%B\ \|\                  " current char
-set statusline+=%l,%c\ \|\                    " position
+set statusline+=%b,0x%B\ \┊\                  " current char
+set statusline+=%l,%c\ \┊\                    " position
 set statusline+=%%%p                          " file %
 
 " netrw stuff
