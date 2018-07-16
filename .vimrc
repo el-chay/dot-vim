@@ -1,5 +1,5 @@
 set ts=4 sw=4 laststatus=2
-set et vb is ic scs hls nocp nosmd
+set et vb is ic scs sta hls nocp nosmd
 setlocal spell spelllang=en_us
 colorscheme zenburn
 syntax on
