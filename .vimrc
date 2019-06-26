@@ -27,7 +27,13 @@ let $PAGER=''
 runtime ftplugin/man.vim
 set keywordprg=:Man
 set guifont=Inconsolata\ Medium\ 14
-map <F12> :0r!wget -q http://whatthecommit.com/index.txt -O -<CR>
 " Man
 runtime ftplugin/man.vim
 set nomodeline
+map <F12> :0r!wget -q http://whatthecommit.com/index.txt -O -<CR>
+set clipboard=unnamed
+set clipboard=unnamedplus
+
+" Space-vim
+let mapleader = " "
+nnoremap <Leader>w <C-W>
