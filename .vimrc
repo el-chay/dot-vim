@@ -1,5 +1,7 @@
+set guifont=Inconsolata\ Medium\ 14
 set ts=4 sw=4 laststatus=2
 set et vb is ic scs sta hls nocp nosmd
+set nomodeline
 setlocal spell spelllang=en_us
 colorscheme zenburn
 syntax on
@@ -26,14 +28,12 @@ let g:slimv_repl_split=4
 let $PAGER=''
 runtime ftplugin/man.vim
 set keywordprg=:Man
-set guifont=Inconsolata\ Medium\ 14
-" Man
-runtime ftplugin/man.vim
-set nomodeline
-map <F12> :0r!wget -q http://whatthecommit.com/index.txt -O -<CR>
+" Use system clipboard.
 set clipboard=unnamed
 set clipboard=unnamedplus
-
-" Space-vim
+" Map leader to space, bind C-W to <Space>W, Split with w/ w-
 let mapleader = " "
 nnoremap <Leader>w <C-W>
+nnoremap <Leader>w/ :vsplit<cr>
+nnoremap <Leader>w- :split<cr>
+map <F12> :0r!wget -q http://whatthecommit.com/index.txt -O -<CR>
