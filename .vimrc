@@ -6,19 +6,19 @@ setlocal spell spelllang=en_us
 colorscheme zenburn
 syntax on
 
+hi StatusLine ctermbg=green ctermfg=black
 set statusline=   " Reload!
-set statusline+=%{mode()}\┊                   " Mode
+set statusline+=%{mode()}\ \|                   " Mode
 set statusline+=\ %t\                         " file name
-set statusline+=%{!empty(fugitive#head())?'('.fugitive#head().')\ ':''} " Branch
-set statusline+=\┊\ %{!empty(&ft)?&ft:'none'},  " filetype
+set statusline+=%{!empty(fugitive#head())?fugitive#head().'⸙':''} " Branch
+set statusline+=\|\ %{!empty(&ft)?&ft:'none'},  " filetype
 set statusline+=%{!empty(&fenc)?&fenc:&enc},  " encoding
 set statusline+=%{&fileformat}\               " file format
 set statusline+=%m%w%h%r                      " flags
 set statusline+=%=                            " right align
-set statusline+=%b,0x%B\ \┊\                  " current char
-set statusline+=%l,%c\ \┊\                    " position
+set statusline+=%b,0x%B\ \|\                  " current char
+set statusline+=%l,%c\ \|\                    " position
 set statusline+=%%%p                          " file %
-
 " netrw stuff
 let g:netrw_banner = 0
 " Slimv
