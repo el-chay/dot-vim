@@ -36,4 +36,11 @@ let mapleader = " "
 nnoremap <Leader>w <C-W>
 nnoremap <Leader>w/ :vsplit<cr>
 nnoremap <Leader>w- :split<cr>
+cnoremap <C-A> <Home>
+cnoremap <C-H> <Left>
+cnoremap <C-L> <Right>
+cnoremap <C-J> <Down>
+cnoremap <C-K> <Up>
+cnoremap <C-W> <S-Right>
+cnoremap <C-B> <S-Left>
 map <F12> :0r!wget -q http://whatthecommit.com/index.txt -O -<CR>
