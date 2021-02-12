@@ -44,3 +44,4 @@ cnoremap <C-K> <Up>
 cnoremap <C-W> <S-Right>
 cnoremap <C-B> <S-Left>
 map <F12> :0r!wget -q http://whatthecommit.com/index.txt -O -<CR>
+hi MatchParen ctermfg=red
