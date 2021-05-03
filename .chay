@@ -1,5 +1,4 @@
-set -o vi
-#PS1='\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+#!/usr/bin/env bash
 showoff-branch(){
     local PS='\u@\h:\w'
     PS=${PS@P}
@@ -7,9 +6,8 @@ showoff-branch(){
     BR=$(git branch --show-current 2>/dev/null) && BR="ᛘ"$BR
     printf "\e]0;$PS$BR\a"
 }
-decolor(){ tput setaf 7;}
-color(){ tput setaf $1;}
-PS1="$(color 3)\u@\h$(decolor):$(color 2)\w$(decolor)\$ "
+
+export PS1='\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
 export -f showoff-branch
-PROMPT_COMMAND=showoff-branch
-[ -n "$INSIDE_EMACS" ] && unset PROMPT_COMMAND
+[ -z "$INSIDE_EMACS" ] && export PROMPT_COMMAND=showoff-branch
+set -o vi
