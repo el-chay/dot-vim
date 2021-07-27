@@ -3,10 +3,9 @@ set ts=4 sw=4 laststatus=2
 set et vb is ic scs sta hls nocp nosmd
 set nomodeline
 setlocal spell spelllang=en_us
-colorscheme zenburn
+colorscheme nord
 syntax on
 
-hi StatusLine ctermbg=green ctermfg=black
 set statusline=   " Reload!
 set statusline+=%{mode()}\ \|                   " Mode
 set statusline+=\ %t\                         " file name
@@ -44,4 +43,3 @@ cnoremap <C-K> <Up>
 cnoremap <C-W> <S-Right>
 cnoremap <C-B> <S-Left>
 map <F12> :0r!wget -q http://whatthecommit.com/index.txt -O -<CR>
-hi MatchParen ctermfg=red
