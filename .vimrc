@@ -3,7 +3,7 @@ set ts=4 sw=4 laststatus=2
 set et vb is ic scs sta hls nocp nosmd
 set nomodeline
 setlocal spell spelllang=en_us
-colorscheme nord
+colorscheme zenburn
 syntax on
 
 set statusline=   " Reload!
