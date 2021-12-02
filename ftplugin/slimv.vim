@@ -1,6 +1,6 @@
 " slimv.vim:    The Superior Lisp Interaction Mode for VIM
-" Version:      0.9.14
-" Last Change:  10 Jul 2017
+" Version:      0.9.13
+" Last Change:  18 Mar 2017
 " Maintainer:   Tamas Kovacs <kovisoft at gmail dot com>
 " License:      This file is placed in the public domain.
 "               No warranty, express or implied.
@@ -521,14 +521,9 @@ function! SlimvSwankResponse()
     endif
     if s:swank_actions_pending == 0 && s:last_update >= 0 && s:last_update < localtime() - 2
         " All SWANK output handled long ago, restore original update frequency
-        if &updatetime == g:slimv_updatetime
-            let &updatetime = s:save_updatetime
-        endif
+        let &updatetime = s:save_updatetime
     else
         " SWANK output still pending, keep higher update frequency
-        if &updatetime != g:slimv_updatetime
-            let s:save_updatetime = &updatetime
-        endif
         let &updatetime = g:slimv_updatetime
     endif
 endfunction
@@ -536,12 +531,11 @@ endfunction
 " Execute the given command and write its output at the end of the REPL buffer
 function! SlimvCommand( cmd )
     silent execute a:cmd
-    if &updatetime != g:slimv_updatetime
-        let s:save_updatetime = &updatetime
+    if g:slimv_updatetime < &updatetime
+        " Update more frequently until all swank responses processed
+        let &updatetime = g:slimv_updatetime
+        let s:last_update = -1
     endif
-    " Update more frequently until all swank responses processed
-    let &updatetime = g:slimv_updatetime
-    let s:last_update = -1
 endfunction
 
 " Execute the given SWANK command, wait for and return the response
@@ -642,7 +636,7 @@ function! SlimvReplLeave()
         " Check if REPL menu exists, then remove it
         aunmenu REPL
         execute ':unmap ' . g:slimv_leader . '\'
-    catch
+    catch /.*/
         " REPL menu not found, we cannot remove it
     endtry
     if g:slimv_repl_split
@@ -1581,11 +1575,7 @@ endfunction
 " TODO: implement custom indent procedure and omit lispindent()
 function SlimvLispindent( lnum )
     set lisp
-    if SlimvGetFiletype() =~ '.*clojure.*' && exists( '*GetClojureIndent' ) && line('.') == a:lnum
-        let li = GetClojureIndent()
-    else
-        let li = lispindent( a:lnum )
-    endif
+    let li = lispindent( a:lnum )
     set nolisp
     let backline = max([a:lnum-g:slimv_indent_maxlines, 1])
     let oldpos = getpos( '.' )
@@ -1725,11 +1715,6 @@ function! SlimvIndentUnsafe( lnum )
             if lb >= l && (lb > l || cb > c)
                 return cb
             endif
-            " Is this a multi-arity function definition?
-            let line = strpart( getline(l), c-1 )
-            if match( line, '(\s*\[' ) >= 0
-                return c + 1
-            endif
         endif
         " Is this a form with special indentation?
         let line = strpart( getline(l), c-1 )
@@ -1833,10 +1818,6 @@ function! SlimvIndentUnsafe( lnum )
         " Fix indentation issues not handled by the default lisp.vim
         if SlimvGetFiletype() =~ '.*clojure.*'
             if match( func, 'defn$' ) >= 0
-                return c + 1
-            endif
-        elseif SlimvGetFiletype() =~ '.*\(scheme\|racket\).*'
-            if match( func, 'syntax-rules$' ) >= 0
                 return c + 1
             endif
         else
@@ -2742,12 +2723,7 @@ function! SlimvEvalBuffer()
         call SlimvError( "Cannot evaluate the REPL buffer." )
         return
     endif
-    let first_line = 1
-    if getline( first_line )[0] == '#'
-        " skip shebang line
-        let first_line += 1
-    endif
-    let lines = getline( first_line, '$' )
+    let lines = getline( 1, '$' )
     if SlimvGetFiletype() == 'scheme'
         " Swank-scheme requires us to pass a single s-expression
         " so embed buffer lines in a (begin ...) block
@@ -3432,7 +3408,7 @@ function! SlimvFindDefinitionsForEmacs( symbol )
         else
             exec ":tjump " . a:symbol
         endif
-    catch
+    catch /^Vim\%((\a\+)\)\=:E426/
         call SlimvError( "\r" . v:exception )
     endtry
 endfunction
@@ -3454,7 +3430,6 @@ endfunction
 function! SlimvFindDefinitionsPrompt()
     if SlimvConnectSwank()
         let symbol = input( 'Find Definitions For: ', SlimvSelectSymbol() )
-        echon "\r"
         call SlimvFindDefinitionsForEmacs( symbol )
     endif
 endfunction
