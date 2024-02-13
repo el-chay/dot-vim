@@ -65,13 +65,12 @@ This function should only modify configuration layer settings."
      spell-checking
      syntax-checking
      themes-megapack
-     scheme
+     (scheme :variables scheme-implementations '(guile))
      common-lisp
      emacs-lisp
      erlang
      graphviz
      xkcd
-     ;; version-control
      treemacs
      )
 
@@ -617,6 +616,7 @@ This function is called at the very end of Spacemacs initialization."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(evil-want-Y-yank-to-eol nil)
+ '(package-selected-packages
  '(tab-width 4))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
