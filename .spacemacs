@@ -32,27 +32,36 @@ This function should only modify configuration layer settings."
 
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
-   '(systemd
+   '(nginx
+     csv
+     systemd
      yaml
-     rust
-     go
      sql
      python
      vimscript
      javascript
-     ruby
+     rub
      html
      helm
      auto-completion
      better-defaults
      git
      markdown
-     ;;org
+     (org :variables
+          org-format-latex-options
+          '(:foreground default :background default
+                       :scale 2.0 :html-foreground "Black"
+                       :html-background "Transparent"
+                       :html-scale 1.0 :matchers
+                       ("begin" "$1" "$" "$$" "\\(" "\\[")))
+     latex
+     auto-completion
      (shell :variables
-             shell-default-shell 'ansi-term
-             shell-default-term-shell "/bin/bash"
-             shell-default-height 30
-             shell-default-position 'bottom)
+            shell-default-shell 'ansi-term
+            shell-default-term-shell "/bin/bash"
+            shell-default-height 30
+            shell-default-position 'bottom)
+     (c-c++ :variables c-basic-offset 4)
      spell-checking
      syntax-checking
      themes-megapack
@@ -60,10 +69,11 @@ This function should only modify configuration layer settings."
      common-lisp
      emacs-lisp
      erlang
+     graphviz
      xkcd
      ;; version-control
-     treemacs)
-
+     treemacs
+     )
 
    ;; List of additional packages that will be installed without being wrapped
    ;; in a layer (generally the packages are installed only and should still be
@@ -572,8 +582,27 @@ This function is called at the very end of Spacemacs startup, after layer
 configuration.
 Put your configuration code here, except for variables that should be set
 before packages are loaded."
-)
-
+  (flycheck-define-checker python-ruff
+    "A Python syntax and style checker using the ruff utility.
+To override the path to the ruff executable, set
+`flycheck-python-ruff-executable'.
+See URL `http://pypi.python.org/pypi/ruff'."
+    :command ("ruff"
+              "--format=text"
+              (eval (when buffer-file-name
+                      (concat "--stdin-filename=" buffer-file-name)))
+              "-")
+    :standard-input t
+    :error-filter (lambda (errors)
+                    (let ((errors (flycheck-sanitize-errors errors)))
+                      (seq-map #'flycheck-flake8-fix-error-level errors)))
+    :error-patterns
+    ((warning line-start
+              (file-name) ":" line ":" (optional column ":") " "
+              (id (one-or-more (any alpha)) (one-or-more digit)) " "
+              (message (one-or-more not-newline))
+              line-end))
+    :modes python-mode))
 
 ;; Do not write anything past this comment. This is where Emacs will
 ;; auto-generate custom variable definitions.
@@ -589,4 +618,10 @@ This function is called at the very end of Spacemacs initialization."
  ;; If there is more than one, they won't work right.
  '(evil-want-Y-yank-to-eol nil)
  '(tab-width 4))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(highlight-parentheses-highlight ((nil (:weight ultra-bold))) t))
 )
